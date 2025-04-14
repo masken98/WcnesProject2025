@@ -1,6 +1,8 @@
 /**
  * Tobias Mages & Wenqing Yan
- * Modified for convolutional coding (rate 1/2 with K=3)
+ * 
+ * support functions to generate payload data and function
+ * 
  */
 
  #ifndef PACKET_GERNATION_LIB
@@ -10,16 +12,11 @@
  #include <string.h>
  #include <math.h>
  #include "pico/stdlib.h"
+ #include "packet_generation.h"
  
- // New definitions for the raw and encoded payload sizes.
- // Here we assume a raw payload of 7 samples each 2 bytes plus a 2-byte index.
- #define RAW_PAYLOADSIZE     (14 + 2)    // 2-byte index + 7 samples * 2 bytes = 16 bytes total.
- // For a rate-1/2 encoder, every input bit is doubled in output; plus tail bits (K-1 extra input zeros).
- // For RAW_PAYLOADSIZE of 16 bytes = 128 bits, plus 2 tail bits -> (128+2)*2 = 260 bits, i.e. ceil(260/8)=33 bytes.
- #define MAX_ENC_PAYLOADSIZE 33
- 
- #define HEADER_LEN  10 // 8 bytes header + 1 byte payload length + 1 byte sequence number.
- #define buffer_size(x, y) (((x + y) % 4 == 0) ? ((x + y) / 4) : ((x + y) / 4 + 1))
+ #define PAYLOADSIZE 14
+ #define HEADER_LEN  10 // 8 header + length + seq
+ #define buffer_size(x, y) (((x + y) % 4 == 0) ? ((x + y) / 4) : ((x + y) / 4 + 1)) // define the buffer size with ceil((PAYLOADSIZE+HEADER_LEN)/4)
  
  #ifndef MINMAX
  #define MINMAX
@@ -33,35 +30,33 @@
  uint8_t *packet_hdr_template(uint16_t receiver);
  
  /* 
-  * generate a uniform random number.
+  * generate of a uniform random number.
   */
  uint32_t rnd();
  
  /* 
-  * generate a compressible payload sample
+  * generate compressible payload sample
+  * file_position provides the index of the next data byte (increments by 2 each time the function is called)
   */
+ extern uint16_t file_position;
  uint16_t generate_sample();
  
  /*
-  * Fill the buffer with payload data.
-  * include_index: if true, include a 2-byte file index at the start.
-  * length: number of bytes to fill in (should match RAW_PAYLOADSIZE).
-  */
+  * fill packet with 16-bit samples
+  * include_index: shall the file index be included at the first two byte?
+  * length: the length of the buffer which can be filled with data
+ */
  void generate_data(uint8_t *buffer, uint8_t length, bool include_index);
  
- /*
-  * Add a header to the packet.
-  * The header consists of an 8-byte signature, one payload length byte, and one sequence byte.
-  * payload_len: the length (in bytes) of the error-corrected payload (after convolutional coding).
-  */
- void add_header(uint8_t *packet, uint8_t seq, uint8_t *header_template, uint8_t payload_len);
  
- /*
-  * Convolutional encoder (rate 1/2, constraint length 3, generators 7 and 5 (octal)).
-  * It takes the raw input (in bytes) and produces an encoded output.
-  * output_len: returns the encoded length in bytes.
+ /* including a header to the packet:
+  * - 8B header sequence
+  * - 1B payload length
+  * - 1B sequence number
+  *
+  * packet: buffer to be updated with the header
+  * seq: sequence number of the packet
   */
- void conv_encode(uint8_t *input, int input_len, uint8_t *output, int *output_len);
+ void add_header(uint8_t *packet, uint8_t seq, uint8_t *header_template);
  
  #endif
- 

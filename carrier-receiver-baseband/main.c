@@ -1,11 +1,13 @@
 /**
  * Tobias Mages & Wenqing Yan
  * Backscatter PIO
- * Modified for convolutional coding with Viterbi decoding (transmitter side)
- * 02-March-2023 (modified date)
+ * 02-March-2023
  *
- * Note: This transmitter now applies a convolutional code; you will need to perform
- * Viterbi decoding on the receiver side.
+ * See the sub-projects ... for further information:
+ *  - baseband
+ *  - carrier-CC2500
+ *  - receiver-CC2500
+ *
  */
 
  #include <stdio.h>
@@ -25,17 +27,18 @@
  #include "receiver_CC2500.h"
  #include "packet_generation.h"
  
+ 
  #define RADIO_SPI             spi0
  #define RADIO_MISO              16
  #define RADIO_MOSI              19
  #define RADIO_SCK               18
  
- #define TX_DURATION            250 // send a packet every 250ms
+ #define TX_DURATION            250 // send a packet every 250ms (when changing baud-rate, ensure that the TX delay is larger than the transmission time)
  #define RECEIVER              2500 // define the receiver board either 2500 or 1352
  #define PIN_TX1                  6
  #define PIN_TX2                 27
- #define CLOCK_DIV0              40
- #define CLOCK_DIV1              36
+ #define CLOCK_DIV0              40 // larger
+ #define CLOCK_DIV1              36 // smaller
  #define DESIRED_BAUD        100000
  #define TWOANTENNAS          true
  
@@ -52,12 +55,13 @@
      // Make the SPI pins available to picotool
      bi_decl(bi_3pins_with_func(RADIO_MOSI, RADIO_MISO, RADIO_SCK, GPIO_FUNC_SPI));
  
-     // Chip select initialization for receiver and carrier.
+     // Chip select is active-low, so we'll initialise it to a driven-high state
      gpio_init(RX_CSN);
      gpio_set_dir(RX_CSN, GPIO_OUT);
      gpio_put(RX_CSN, 1);
      bi_decl(bi_1pin_with_name(RX_CSN, "SPI Receiver CS"));
  
+     // Chip select is active-low, so we'll initialise it to a driven-high state
      gpio_init(CARRIER_CSN);
      gpio_set_dir(CARRIER_CSN, GPIO_OUT);
      gpio_put(CARRIER_CSN, 1);
@@ -65,27 +69,18 @@
  
      sleep_ms(5000);
  
-     /* Setup backscatter state machine */
+     /* setup backscatter state machine */
      PIO pio = pio0;
      uint sm = 0;
      struct backscatter_config backscatter_conf;
      uint16_t instructionBuffer[32] = {0}; // maximal instruction size: 32
      backscatter_program_init(pio, sm, PIN_TX1, PIN_TX2, CLOCK_DIV0, CLOCK_DIV1, DESIRED_BAUD, &backscatter_conf, instructionBuffer, TWOANTENNAS);
  
-     // Allocate a message buffer.
-     // Total packet size = HEADER_LEN + encoded_payload_length.
-     // We allocate a buffer that is large enough.
-     static uint8_t message[64] = {0};  
-     // Buffer for the backscatter FIFO; size computed using your existing macro.
-     static uint32_t buffer[buffer_size(MAX_ENC_PAYLOADSIZE + HEADER_LEN, HEADER_LEN)] = {0};
-     
+     static uint8_t message[buffer_size(PAYLOADSIZE+2, HEADER_LEN)*4] = {0};  // include 10 header bytes
+     static uint32_t buffer[buffer_size(PAYLOADSIZE, HEADER_LEN)] = {0}; // initialize the buffer
      static uint8_t seq = 0;
      uint8_t *header_tmplate = packet_hdr_template(RECEIVER);
-     
-     // Buffer to hold raw payload data (size RAW_PAYLOADSIZE) and encoded payload.
-     uint8_t tx_payload_buffer[RAW_PAYLOADSIZE] = {0};
-     uint8_t encoded_payload_buffer[MAX_ENC_PAYLOADSIZE] = {0};
-     int encoded_payload_length = 0;
+     uint8_t tx_payload_buffer[PAYLOADSIZE];
  
      /* Setup carrier */
      printf("\nConfiguring one CC2500 as carrier generator:\n");
@@ -109,61 +104,53 @@
      printf("started listening\n");
      bool rx_ready = true;
  
-     /* Main loop */
+     /* loop */
      while (true) {
          evt = get_event();
          switch(evt){
              case rx_assert_evt:
                  // started receiving
                  rx_ready = false;
-                 break;
+             break;
              case rx_deassert_evt:
                  // finished receiving
                  time_us = to_us_since_boot(get_absolute_time());
                  status = readPacket(rx_buffer);
-                 printPacket(rx_buffer, status, time_us);
+                 printPacket(rx_buffer,status,time_us);
                  RX_start_listen();
                  rx_ready = true;
-                 break;
+             break;
              case no_evt:
-                 // Backscatter a new packet if the receiver is listening.
+                 // backscatter new packet if receiver is listening
                  if (rx_ready){
-                     // 1. Generate the raw payload data (raw payload: index + 7 samples, 16 bytes total).
-                     generate_data(tx_payload_buffer, RAW_PAYLOADSIZE, true);
-                     
-                     // 2. Apply convolutional encoding.
-                     conv_encode(tx_payload_buffer, RAW_PAYLOADSIZE, encoded_payload_buffer, &encoded_payload_length);
-                     
-                     // 3. Build packet header with the encoded payload length.
-                     add_header(message, seq, header_tmplate, (uint8_t)encoded_payload_length);
-                     
-                     // 4. Copy the encoded payload into the packet (after the header).
-                     memcpy(&message[HEADER_LEN], encoded_payload_buffer, encoded_payload_length);
-                     
-                     // 5. Convert the packet to 32-bit words for the FIFO.
-                     int total_packet_length = HEADER_LEN + encoded_payload_length;
-                     for (uint8_t i = 0; i < buffer_size(total_packet_length, HEADER_LEN); i++) {
-                         buffer[i] = ((uint32_t) message[4*i+3]) | (((uint32_t) message[4*i+2]) << 8) |
-                                     (((uint32_t) message[4*i+1]) << 16) | (((uint32_t) message[4*i]) << 24);
+                     /* generate new data */
+                     generate_data(tx_payload_buffer, PAYLOADSIZE, true);
+ 
+                     /* add header (10 byte) to packet */
+                     add_header(&message[0], seq, header_tmplate);
+                     /* add payload to packet */
+                     memcpy(&message[HEADER_LEN], tx_payload_buffer, PAYLOADSIZE);
+ 
+                     /* casting for 32-bit fifo */
+                     for (uint8_t i=0; i < buffer_size(PAYLOADSIZE, HEADER_LEN); i++) {
+                         buffer[i] = ((uint32_t) message[4*i+3]) | (((uint32_t) message[4*i+2]) << 8) | (((uint32_t) message[4*i+1]) << 16) | (((uint32_t)message[4*i]) << 24);
                      }
-                     
-                     // 6. Start transmission.
+                     /* put the data to FIFO (start backscattering) */
                      startCarrier();
                      sleep_ms(1); // wait for carrier to start
-                     backscatter_send(pio, sm, buffer, buffer_size(total_packet_length, HEADER_LEN));
-                     // Wait for transmission duration (computed based on bits to send, baud rate, etc.)
-                     sleep_ms((int)ceil((((double)buffer_size(total_packet_length, HEADER_LEN)) * 8000.0)/((double) DESIRED_BAUD)) + 3);
+                     backscatter_send(pio,sm,buffer,buffer_size(PAYLOADSIZE, HEADER_LEN));
+                     sleep_ms(ceil((((double) buffer_size(PAYLOADSIZE, HEADER_LEN))*8000.0)/((double) DESIRED_BAUD))+3); // wait transmission duration (+3ms)
                      stopCarrier();
-                     
-                     seq++; // Increase sequence number.
+                     /* increase seq number*/ 
+                     seq++;
                  }
                  sleep_ms(TX_DURATION);
-                 break;
+             break;
          }
          sleep_ms(1);
      }
  
-     /* Stop carrier and receiver - never reached in this loop */
+     /* stop carrier and receiver - never reached */
      RX_stop_listen();
      stopCarrier();
  }
