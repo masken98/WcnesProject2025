@@ -1,1 +1,16 @@
-carrier-receiver-baseband/build/
+# Ignore all build folders
+*/build/
+
+# Ignore pycache
+*/__pycache__/
+
+# Ignore all of firefly, only configuration anyway
+carrier-Firefly/
+
+# Ignore VSCode settings
+.vscode/
+
+# C files
+*.o
+
+*/flash.sh
