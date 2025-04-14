@@ -140,7 +140,7 @@ def compute_ber(df, PACKET_LEN=32):
         return sum(errors)/sum(total)
     else:
         print("Warning, the log-file seems empty.")
-        return 0.5
+        return 0.5         
 
 # plot radar chart
 def radar_plot(metrics):
