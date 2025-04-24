@@ -1,4 +1,4 @@
-/**
+ /**
  * Tobias Mages & Wenqing Yan
  * Backscatter PIO
  * 02-March-2023
@@ -26,6 +26,24 @@
 #include "carrier_CC2500.h"
 #include "receiver_CC2500.h"
 #include "packet_generation.h"
+
+// Lengths from packet_generation.h
+#define PREDEF_PAYLOAD_LEN PAYLOADSIZE
+#define PREDEF_PACKET_LEN  (HEADER_LEN + PREDEF_PAYLOAD_LEN)
+
+// Replace the values below with your desired header + payload bytes:
+static const uint8_t predefined_packet[PREDEF_PACKET_LEN] = {
+    // --- 8‑byte sync + 1-byte length + 1-byte sequence ---
+    0xaa, 0xaa, 0xaa, 0xaa, 0xd3, 0x91, 0xd3, 0x91,  // sync/header
+    PREDEF_PAYLOAD_LEN + 1,                             // length byte  (payload + optional CRC)
+    0x00,                                              // sequence number
+
+    // --- 14‑byte payload ---
+    0x10, 0x20, 0x30, 0x40,
+    0x50, 0x60, 0x70, 0x80,
+    0x90, 0xa0, 0xb0, 0xc0,
+    0xd0, 0xe0
+};  
 
 
 #define RADIO_SPI             spi0
@@ -124,12 +142,15 @@ int main() {
                 // backscatter new packet if receiver is listening
                 if (rx_ready){
                     /* generate new data */
-                    generate_data(tx_payload_buffer, PAYLOADSIZE, true);
+                    //generate_data(tx_payload_buffer, PAYLOADSIZE, true);
 
                     /* add header (10 byte) to packet */
-                    add_header(&message[0], seq, header_tmplate);
+                    //add_header(&message[0], seq, header_tmplate);
                     /* add payload to packet */
-                    memcpy(&message[HEADER_LEN], tx_payload_buffer, PAYLOADSIZE);
+                    //memcpy(&message[HEADER_LEN], tx_payload_buffer, PAYLOADSIZE);
+                    
+                    /* use predefined packet for deterministic content */
+                    memcpy(message, predefined_packet, PREDEF_PACKET_LEN);
 
                     /* casting for 32-bit fifo */
                     for (uint8_t i=0; i < buffer_size(PAYLOADSIZE, HEADER_LEN); i++) {
