@@ -34,7 +34,7 @@
 // Replace the values below with your desired header + payload bytes:
 static const uint8_t predefined_packet[PREDEF_PACKET_LEN] = {
     // --- 8‑byte sync + 1-byte length + 1-byte sequence ---
-    0xaa, 0xaa, 0xaa, 0xaa                              // sync/header
+    0xaa, 0xaa, 0xaa, 0xaa,                             // sync/header
     PREDEF_PAYLOAD_LEN + 1,                             // length byte  (payload + optional CRC)
     0x00,                                               // sequence number
 
