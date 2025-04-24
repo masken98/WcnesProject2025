@@ -76,11 +76,12 @@
      uint16_t instructionBuffer[32] = {0}; // maximal instruction size: 32
      backscatter_program_init(pio, sm, PIN_TX1, PIN_TX2, CLOCK_DIV0, CLOCK_DIV1, DESIRED_BAUD, &backscatter_conf, instructionBuffer, TWOANTENNAS);
  
-     static uint8_t message[buffer_size(PAYLOADSIZE+2, HEADER_LEN)*4] = {0};  // include 10 header bytes
-     static uint32_t buffer[buffer_size(PAYLOADSIZE, HEADER_LEN)] = {0}; // initialize the buffer
+     static uint8_t message[buffer_size(ENCODED_PAYLOADSIZE, HEADER_LEN)*4] = {0};
+     static uint32_t buffer[buffer_size(ENCODED_PAYLOADSIZE, HEADER_LEN)] = {0};
      static uint8_t seq = 0;
      uint8_t *header_tmplate = packet_hdr_template(RECEIVER);
      uint8_t tx_payload_buffer[PAYLOADSIZE];
+     uint8_t encoded_payload[PAYLOADSIZE * 2];
  
      /* Setup carrier */
      printf("\nConfiguring one CC2500 as carrier generator:\n");
@@ -122,28 +123,36 @@
              break;
              case no_evt:
                  // backscatter new packet if receiver is listening
-                 if (rx_ready){
-                     /* generate new data */
-                     generate_data(tx_payload_buffer, PAYLOADSIZE, true);
- 
-                     /* add header (10 byte) to packet */
-                     add_header(&message[0], seq, header_tmplate);
-                     /* add payload to packet */
-                     memcpy(&message[HEADER_LEN], tx_payload_buffer, PAYLOADSIZE);
- 
-                     /* casting for 32-bit fifo */
-                     for (uint8_t i=0; i < buffer_size(PAYLOADSIZE, HEADER_LEN); i++) {
-                         buffer[i] = ((uint32_t) message[4*i+3]) | (((uint32_t) message[4*i+2]) << 8) | (((uint32_t) message[4*i+1]) << 16) | (((uint32_t)message[4*i]) << 24);
-                     }
-                     /* put the data to FIFO (start backscattering) */
-                     startCarrier();
-                     sleep_ms(1); // wait for carrier to start
-                     backscatter_send(pio,sm,buffer,buffer_size(PAYLOADSIZE, HEADER_LEN));
-                     sleep_ms(ceil((((double) buffer_size(PAYLOADSIZE, HEADER_LEN))*8000.0)/((double) DESIRED_BAUD))+3); // wait transmission duration (+3ms)
-                     stopCarrier();
-                     /* increase seq number*/ 
-                     seq++;
-                 }
+                 if (rx_ready) {
+                    // (1) Generate original payload sample
+                    generate_data(tx_payload_buffer, PAYLOADSIZE, true);
+                    
+                    // (2) Hamming-encode the payload
+                    hamming_encode_data(tx_payload_buffer, PAYLOADSIZE, encoded_payload);
+                    
+                    // (3) Add header with updated payload length (encoded size)
+                    add_header(&message[0], seq, header_tmplate, (PAYLOADSIZE * 2));
+                    
+                    // (4) Copy encoded payload to the message right after the header
+                    memcpy(&message[HEADER_LEN], encoded_payload, (PAYLOADSIZE * 2));
+                    
+                    // (5) Pack message bytes into the 32-bit buffer for backscatter transmission
+                    for (uint8_t i = 0; i < buffer_size(ENCODED_PAYLOADSIZE, HEADER_LEN); i++) {
+                        buffer[i] = ((uint32_t) message[4 * i + 3]) |
+                                    (((uint32_t) message[4 * i + 2]) << 8) |
+                                    (((uint32_t) message[4 * i + 1]) << 16) |
+                                    (((uint32_t) message[4 * i]) << 24);
+                    }
+                    
+                    // Begin transmission as before.
+                    startCarrier();
+                    sleep_ms(1); // allow carrier to start
+                    backscatter_send(pio, sm, buffer, buffer_size(ENCODED_PAYLOADSIZE, HEADER_LEN));
+                    sleep_ms(ceil((((double) buffer_size(ENCODED_PAYLOADSIZE, HEADER_LEN)) * 8000.0) / ((double) DESIRED_BAUD)) + 3);
+                    stopCarrier();
+                    
+                    seq++;  // increase sequence number for the next packet.
+                }
                  sleep_ms(TX_DURATION);
              break;
          }
@@ -154,4 +163,3 @@
      RX_stop_listen();
      stopCarrier();
  }
- 

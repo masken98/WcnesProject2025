@@ -91,13 +91,48 @@
   * seq: sequence number of the packet
   * header_template: obtained using packet_hdr_template()
   */
- void add_header(uint8_t *packet, uint8_t seq, uint8_t *header_template) {
-     /* fill in the header sequence*/
-     for(int loop = 0; loop < HEADER_LEN-2; loop++) {
-         packet[loop] = header_template[loop];
-         }
-     /* add the payload length*/
-     packet[HEADER_LEN-2] = 1 + PAYLOADSIZE; // The packet length is defined as the payload data, excluding the length byte and the optional CRC. (cc2500 data sheet, p. 30)
-     /* add the packet as sequence number. */
-     packet[HEADER_LEN-1] = seq;
- }
+ void add_header(uint8_t *packet, uint8_t seq, uint8_t *header_template, uint8_t payload_length) {
+    // Copy header sequence from template (first HEADER_LEN-2 bytes)
+    for (int loop = 0; loop < HEADER_LEN - 2; loop++) {
+        packet[loop] = header_template[loop];
+    }
+    // Update the length byte (1 byte for the “length” field itself plus the encoded payload size)
+    packet[HEADER_LEN - 2] = 1 + payload_length;
+    // Add the sequence number
+    packet[HEADER_LEN - 1] = seq;
+}
+
+
+ // Hamming(7,4) encoder functions
+
+// Encodes a 4-bit nibble into a 7-bit code word
+// The output is arranged as: [p1, p2, d1, p3, d2, d3, d4] 
+// where p1 covers bits 1,3,5,7; p2 covers bits 2,3,6,7; p3 covers bits 4,5,6,7.
+uint8_t hamming_encode_nibble(uint8_t nibble) {
+    // Assume nibble contains only the lower 4 bits.
+    uint8_t d1 = (nibble >> 3) & 0x01;
+    uint8_t d2 = (nibble >> 2) & 0x01;
+    uint8_t d3 = (nibble >> 1) & 0x01;
+    uint8_t d4 = nibble & 0x01;
+    uint8_t p1 = d1 ^ d2 ^ d4;   // parity for positions 1,3,5,7
+    uint8_t p2 = d1 ^ d3 ^ d4;   // parity for positions 2,3,6,7
+    uint8_t p3 = d2 ^ d3 ^ d4;   // parity for positions 4,5,6,7
+    uint8_t encoded = (p1 << 6) | (p2 << 5) | (d1 << 4) | (p3 << 3) | (d2 << 2) | (d3 << 1) | (d4);
+    return encoded; // Only the lower 7 bits are significant.
+}
+
+// Encodes one byte into two 8-bit variables (each holding a 7-bit code word)
+void hamming_encode_byte(uint8_t byte, uint8_t *encoded_hi, uint8_t *encoded_lo) {
+    uint8_t high_nibble = (byte >> 4) & 0x0F;
+    uint8_t low_nibble = byte & 0x0F;
+    *encoded_hi = hamming_encode_nibble(high_nibble);
+    *encoded_lo = hamming_encode_nibble(low_nibble);
+}
+
+// Encodes an array of bytes. 'in_len' is the number of input bytes.
+// The output buffer must be sized to at least 2 * in_len bytes.
+void hamming_encode_data(const uint8_t *in, uint16_t in_len, uint8_t *out) {
+    for (int i = 0; i < in_len; i++) {
+        hamming_encode_byte(in[i], &out[2 * i], &out[2 * i + 1]);
+    }
+}

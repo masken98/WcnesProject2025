@@ -15,6 +15,7 @@
  #include "packet_generation.h"
  
  #define PAYLOADSIZE 14
+ #define ENCODED_PAYLOADSIZE (PAYLOADSIZE * 2)
  #define HEADER_LEN  10 // 8 header + length + seq
  #define buffer_size(x, y) (((x + y) % 4 == 0) ? ((x + y) / 4) : ((x + y) / 4 + 1)) // define the buffer size with ceil((PAYLOADSIZE+HEADER_LEN)/4)
  
@@ -57,6 +58,13 @@
   * packet: buffer to be updated with the header
   * seq: sequence number of the packet
   */
- void add_header(uint8_t *packet, uint8_t seq, uint8_t *header_template);
+ void add_header(uint8_t *packet, uint8_t seq, uint8_t *header_template, uint8_t payload_length);
  
+ uint8_t hamming_encode_nibble(uint8_t nibble);
+
+ void hamming_encode_byte(uint8_t byte, uint8_t *encoded_hi, uint8_t *encoded_lo);
+
+ void hamming_encode_data(const uint8_t *in, uint16_t in_len, uint8_t *out);
+
+
  #endif
