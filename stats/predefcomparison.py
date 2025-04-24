@@ -2,12 +2,33 @@
 import re
 import sys
 
+def flip_counter(expected: list[int], received: list[int]) -> tuple[int, int]:
+    """
+    Compare two lists of integers (e.g. bytes).  
+    Returns a tuple (flips_to_one, flips_to_zero), where:
+      - flips_to_one is the total count of bits that went from 0→1
+      - flips_to_zero is the total count of bits that went from 1→0
+    """
+    if len(expected) != len(received):
+        raise ValueError(f"List lengths differ: {len(expected)} vs {len(received)}")
+    flips_to_one = 0
+    flips_to_zero = 0
+
+    for e, r in zip(expected, received):
+        diff = e ^ r
+        # bits that flipped to 1 are those that differ AND are 1 in r
+        flips_to_one  += hamming_weight(diff & r)
+        # bits that flipped to 0 are those that differ AND are 1 in e
+        flips_to_zero += hamming_weight(diff & e)
+
+    return flips_to_one, flips_to_zero
+
 def hamming_weight(x: int) -> int:
     """Count number of set bits in x."""
     return bin(x).count('1')
 
 def main():
-    logfile = 'nytt_test.txt'  # file in the same directory
+    logfile = './logs/base4036dist300.txt'  # file in the same directory
 
     # --- define your expected packet here ---
     # Byte sequence: 0f 00 10 20 30 40 50 60 70 80 90 a0 b0 c0 d0 e0
@@ -19,6 +40,8 @@ def main():
     total_bit_errors = 0
     packets_seen = 0
     skipped = 0
+    flipped_to_one = 0
+    flipped_to_zero = 0
 
     # Regex to capture a run of hex-bytes between pipes
     line_re = re.compile(r"\|\s*([0-9A-Fa-f]{2}(?:\s+[0-9A-Fa-f]{2})+)\s*\|")
@@ -45,9 +68,15 @@ def main():
                     hamming_weight(e ^ r) for e, r in zip(expected, rec_bytes)
                 )
 
+                one, zero = flip_counter(expected, rec_bytes)
+                flipped_to_one  += one
+                flipped_to_zero += zero
+
                 total_bit_errors += bit_errors
                 total_bits += packet_len * 8
                 packets_seen += 1
+
+                # Count flips
 
     except FileNotFoundError:
         print(f"Error: cannot open '{logfile}'", file=sys.stderr)
@@ -63,6 +92,8 @@ def main():
     print(f"Total bits checked  : {total_bits}")
     print(f"Total bit errors    : {total_bit_errors}")
     print(f"Bit-Error Rate (BER): {ber:.6e}")
+    print(f"Flips from 0 to 1   : {flipped_to_one}")
+    print(f"Flips from 1 to 0   : {flipped_to_zero}")
 
 if __name__ == "__main__":
     main()
