@@ -31,10 +31,7 @@
  #include "predefined_packet.h"  // Instead of hardcoding the packet
  #include "hamming.h"
  
- 
- 
- <<<<<<< Updated upstream
- =======
+
  // Lengths from packet_generation.h
  #define PREDEF_PAYLOAD_LEN PAYLOADSIZE
  #define PREDEF_PACKET_LEN  (HEADER_LEN + PREDEF_PAYLOAD_LEN)
@@ -51,9 +48,8 @@
      0x50, 0x60, 0x70, 0x80,
      0x90, 0xa0, 0xb0, 0xc0,
      0xd0, 0xe0
- };  */
- 
- >>>>>>> Stashed changes
+ };*/
+
  
  #define RADIO_SPI             spi0
  #define RADIO_MISO              16
@@ -166,21 +162,27 @@
                  // finished receiving
                  time_us = to_us_since_boot(get_absolute_time());
                  status = readPacket(rx_buffer);
-                 printPacket(rx_buffer,status,time_us);
+                 /*printf("Before decoding:\n");
+                 for (size_t i = 0; i < PREDEF_PACKET_LEN; i++) {
+                    printf("%02X ", rx_buffer[i]);
+                 }
+                 printf("\n");
+                 printPacket(rx_buffer,status,time_us);*/
  
                  //decode_bch_in_c(rx_buffer + HEADER_LEN, PREDEF_PAYLOAD_LEN);
  
-                 /*uint8_t decoded_buffer[RX_BUFFER_SIZE];
+                 uint8_t decoded_buffer[PREDEF_PAYLOAD_LEN];
                  size_t decoded_len;
- 
-                 hamming_decode(rx_buffer + HEADER_LEN, PREDEF_PAYLOAD_LEN, decoded_buffer, &decoded_len);
- 
-                 // Optionally, print
-                 printf("Decoded Packet:\n");
-                 for (size_t i = 0; i < decoded_len; i++) {
-                     printf("%02X ", decoded_buffer[i]);
+
+                 printf("Before decoding:\n");
+                 for (size_t i = 0; i < PREDEF_PACKET_LEN; i++) {
+                    printf("%02X ", rx_buffer[i]);
                  }
-                 printf("\n");*/
+                 printf("\n");
+ 
+                 hamming_decode(rx_buffer+2, PREDEF_PAYLOAD_LEN, decoded_buffer, &decoded_len);
+                 status.len = decoded_len;
+                 printPacket(decoded_buffer,status,time_us);
  
                  RX_start_listen();
                  rx_ready = true;
@@ -189,13 +191,21 @@
                  // backscatter new packet if receiver is listening
                  if (rx_ready){
                      /* generate new data */
-                     generate_data(tx_payload_buffer, PAYLOADSIZE, true);
+                     //generate_data(tx_payload_buffer, PAYLOADSIZE, true);
  
                      /* add header (10 byte) to packet */
-                     add_header(&message[0], seq, header_tmplate);
+                     //add_header(&message[0], seq, header_tmplate);
                      /* add payload to packet */
-                     memcpy(&message[HEADER_LEN], tx_payload_buffer, PAYLOADSIZE);
- 
+                     //memcpy(&message[HEADER_LEN], tx_payload_buffer, PAYLOADSIZE);
+                    // Hamming encoded payload with header etc.
+                     memcpy(message, predefined_packet, PREDEF_PACKET_LEN);
+
+                     printf("Sent packet (Hamming-encoded payload):\n");
+                     for (size_t i = 0; i < PREDEF_PACKET_LEN; i++) {
+                        printf("%02X ", message[i]);
+                     }
+                     printf("\n\n");
+
                      /* casting for 32-bit fifo */
                      for (uint8_t i=0; i < buffer_size(PAYLOADSIZE, HEADER_LEN); i++) {
                          buffer[i] = ((uint32_t) message[4*i+3]) | (((uint32_t) message[4*i+2]) << 8) | (((uint32_t) message[4*i+1]) << 16) | (((uint32_t)message[4*i]) << 24);
@@ -204,8 +214,8 @@
                      startCarrier();
                      sleep_ms(1); // wait for carrier to start
                      backscatter_send(pio,sm,buffer,buffer_size(PAYLOADSIZE, HEADER_LEN));
+                     // Wait for transmission time (+3ms and +5ms buffer)
                      sleep_ms(ceil((((double) buffer_size(PAYLOADSIZE, HEADER_LEN))*8000.0)/((double) DESIRED_BAUD))+3); // wait transmission duration (+3ms)
-                     stopCarrier();
                      /* increase seq number*/ 
                      seq++;
                  }
