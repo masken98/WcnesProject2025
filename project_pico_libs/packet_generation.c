@@ -102,3 +102,47 @@ void add_header(uint8_t *packet, uint8_t seq, uint8_t *header_template) {
     packet[HEADER_LEN-1] = seq;
 }
 
+/*
+ * Takes a buffer of 16-bit samples and encodes it using the Hamming (15,11) code.
+ * The encoded data is stored in the output buffer.
+ * The output buffer must be large enough to hold the encoded data.
+ * The function returns the number of bytes written to the output buffer.
+*/
+uint8_t hamming_encoder(uint16_t *input_buffer, uint8_t length, uint16_t *output_buffer) {
+    uint8_t output_length = 0;
+    for (uint8_t i = 0; i < length; i++) {
+        uint16_t input = input_buffer[i];
+        uint8_t parity = 0;
+        // Calculate the parity bits
+        for (int j = 0; j < 11; j++) {
+            if (input & (1 << j)) {
+                parity ^= (1 << (j % 4));
+            }
+        }
+        // Store the encoded data in the output buffer
+        output_buffer[output_length++] = (input & 0x7FF) | (parity << 11);
+    }
+    return output_length;
+}
+
+/*
+ * The function takes a buffer of 16-bit samples and decodes it using the Hamming (15,11) code.
+ * The decoded data is stored in the output buffer.
+ * rx_buffer: buffer to be decoded
+ * length: length of the buffer
+ * output_buffer: buffer to store the decoded data
+ */
+void hamming_decoder(uint16_t *rx_buffer, uint8_t length, uint16_t *output_buffer) {
+    for (uint8_t i = 0; i < length; i++) {
+        uint16_t input = rx_buffer[i];
+        uint8_t parity = 0;
+        // Calculate the parity bits
+        for (int j = 0; j < 11; j++) {
+            if (input & (1 << j)) {
+                parity ^= (1 << (j % 4));
+            }
+        }
+        // Store the decoded data in the output buffer
+        output_buffer[i] = (input & 0x7FF) | (parity << 11);
+    }
+}

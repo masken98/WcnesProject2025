@@ -14,7 +14,7 @@
 #include "pico/stdlib.h"
 #include "packet_generation.h"
 
-#define PAYLOADSIZE 14
+#define PAYLOADSIZE 7
 #define HEADER_LEN  10 // 8 header + length + seq
 #define buffer_size(x, y) (((x + y) % 4 == 0) ? ((x + y) / 4) : ((x + y) / 4 + 1)) // define the buffer size with ceil((PAYLOADSIZE+HEADER_LEN)/4)
 
@@ -58,5 +58,12 @@ void generate_data(uint8_t *buffer, uint8_t length, bool include_index);
  * seq: sequence number of the packet
  */
 void add_header(uint8_t *packet, uint8_t seq, uint8_t *header_template);
+
+/* 
+ * Hamming(16,11) encoding
+ * buffer: buffer to be encoded
+ * length: length of the buffer
+ */
+uint8_t hamming_encoder(uint16_t *input_buffer, uint8_t length, uint16_t *output_buffer);
 
 #endif

@@ -104,6 +104,20 @@ int main() {
     printf("started listening\n");
     bool rx_ready = true;
 
+    /* Define predefined sample, 11 samples should give the correct number of bits */
+    uint16_t predefined_buffer[7] = {
+        0x266A, 0x01FD, 0x00, 0x2AA5, 0x7E02, 0x1999, 0x0E3A
+    };
+    /*
+        01001100110 -> 010011001101010 
+        00000011111 -> 000000111111101
+        00000000000 -> 000000000000000
+        01010101010 -> 010101010100101
+        11111100000 -> 111111000000010
+        00110011001 -> 001100110011001
+        00011100011 -> 000111000111010
+    */
+
     /* loop */
     while (true) {
         evt = get_event();
@@ -124,12 +138,14 @@ int main() {
                 // backscatter new packet if receiver is listening
                 if (rx_ready){
                     /* generate new data */
-                    generate_data(tx_payload_buffer, PAYLOADSIZE, true);
+                    //generate_data(tx_payload_buffer, PAYLOADSIZE, true);
 
                     /* add header (10 byte) to packet */
                     add_header(&message[0], seq, header_tmplate);
+
                     /* add payload to packet */
-                    memcpy(&message[HEADER_LEN], tx_payload_buffer, PAYLOADSIZE);
+                    //uint8_t enc_size = hamming_encoder(predefined_buffer, 16, &message[HEADER_LEN]);
+                    memcpy(&message[HEADER_LEN], predefined_buffer, PAYLOADSIZE);
 
                     /* casting for 32-bit fifo */
                     for (uint8_t i=0; i < buffer_size(PAYLOADSIZE, HEADER_LEN); i++) {
