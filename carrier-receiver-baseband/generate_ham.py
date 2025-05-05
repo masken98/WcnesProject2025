@@ -18,7 +18,7 @@ def hamming74_encode(nibble):
     Input: nibble (lower 4 bits used)
     Output: 7-bit encoded int (packed in 1 byte)
     """
-    d = [(nibble >> i) & 1 for i in range(4)]
+    d = [(nibble >> i) & 1 for i in reversed(range(4))]  # d[0]=MSB now
     p1 = d[0] ^ d[1] ^ d[3]
     p2 = d[0] ^ d[2] ^ d[3]
     p3 = d[1] ^ d[2] ^ d[3]
