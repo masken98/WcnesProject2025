@@ -173,12 +173,6 @@
  
                  uint8_t decoded_buffer[PREDEF_PAYLOAD_LEN];
                  size_t decoded_len;
-
-                 printf("Before decoding:\n");
-                 for (size_t i = 0; i < PREDEF_PACKET_LEN; i++) {
-                    printf("%02X ", rx_buffer[i]);
-                 }
-                 printf("\n");
  
                  hamming_decode(rx_buffer+2, PREDEF_PAYLOAD_LEN, decoded_buffer, &decoded_len);
                  status.len = decoded_len;
@@ -199,12 +193,6 @@
                      //memcpy(&message[HEADER_LEN], tx_payload_buffer, PAYLOADSIZE);
                     // Hamming encoded payload with header etc.
                      memcpy(message, predefined_packet, PREDEF_PACKET_LEN);
-
-                     printf("Sent packet (Hamming-encoded payload):\n");
-                     for (size_t i = 0; i < PREDEF_PACKET_LEN; i++) {
-                        printf("%02X ", message[i]);
-                     }
-                     printf("\n\n");
 
                      /* casting for 32-bit fifo */
                      for (uint8_t i=0; i < buffer_size(PAYLOADSIZE, HEADER_LEN); i++) {
