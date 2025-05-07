@@ -28,11 +28,11 @@ def hamming_weight(x: int) -> int:
     return bin(x).count('1')
 
 def main():
-    logfile = './logs/base4036dist300.txt'  # file in the same directory
+    logfile = './test4.txt'  # file in the same directory
 
     # --- define your expected packet here ---
     # Byte sequence: 0f 00 10 20 30 40 50 60 70 80 90 a0 b0 c0 d0 e0
-    expected_hex = "0f 00 10 20 30 40 50 60 70 80 90 a0 b0 c0 d0 e0"
+    expected_hex = "0f 17 1b 1d 1e 27"
     expected = [int(b, 16) for b in expected_hex.split()]
     packet_len = len(expected)
 
