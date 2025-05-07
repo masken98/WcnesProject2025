@@ -1,0 +1,160 @@
+00:00:30.025 | 05 63 02 c6 1e cd | -89 CRC error
+00:00:30.550 | packet overflow (possible length field corrupted) | CRC error
+00:00:30.815 | 05 66 02 cc 1c b6 | -88 CRC error
+00:00:31.340 | 05 28 02 d0 1d eb | -88 CRC error
+00:00:31.605 | 05 69 02 d2 1e f3 | -87 CRC error
+00:00:32.130 | 05 6b 02 d6 67 3b | -87 CRC error
+00:00:32.655 | 05 6d 02 da 23 c4 | -86 CRC error
+00:00:33.179 | 05 6f 02 de 27 b4 | -88 CRC error
+00:00:34.481 | 05 74 02 e8 23 e7 | -90 CRC error
+00:00:35.006 | 05 76 02 ec 19 6c | -89 CRC error
+00:00:35.271 | 05 77 02 ee 29 c9 | -88 CRC error
+00:00:35.537 | packet overflow (possible length field corrupted) | CRC error
+00:00:36.061 | packet overflow (possible length field corrupted) | CRC error
+00:00:36.326 | packet overflow (possible length field corrupted) | CRC error
+00:00:36.851 | packet overflow (possible length field corrupted) | CRC error
+00:00:37.116 | 05 7e 02 fc 17 6b | -91 CRC error
+00:00:37.382 | 05 7f 02 fe 13 e6 | -88 CRC error
+00:00:37.647 | 04 80 03 00 1e | -90 CRC error
+00:00:37.913 | packet overflow (possible length field corrupted) | CRC error
+00:00:38.437 | 05 83 03 06 29 d2 | -91 CRC error
+00:00:38.703 | 01 84 | -88 CRC error
+00:00:38.968 | 05 80 80 0a 0e 62 | -89 CRC error
+00:00:39.493 | 05 87 03 0e 17 51 | -90 CRC error
+00:00:39.759 | 05 88 03 10 25 b3 | -89 CRC error
+00:00:40.283 | 05 8a 03 14 2f 64 | -90 CRC error
+00:00:40.549 | 05 8b 03 16 26 b5 | -88 CRC error
+00:00:40.814 | 05 8c 03 18 16 c2 | -89 CRC error
+00:00:41.080 | 05 8d 03 1a 0b 22 | -89 CRC error
+00:00:41.605 | 05 8f 03 1e 16 19 | -89 CRC error
+00:00:41.870 | packet overflow (possible length field corrupted) | CRC error
+00:00:42.136 | 05 91 03 23 0e 6e | -90 CRC error
+00:00:42.660 | 05 93 03 26 13 41 | -89 CRC error
+00:00:43.444 | 05 96 03 2c 24 f7 | -88 CRC error
+00:00:43.709 | 05 87 03 2e 20 25 | -90 CRC error
+00:00:43.975 | 05 98 03 30 18 a6 | -87 CRC error
+00:00:44.241 | 05 99 03 32 1d 34 | -88 CRC error
+00:00:44.506 | 05 9a 03 34 27 4b | -87 CRC error
+00:00:45.031 | 05 9c 03 38 0f 8f | -87 CRC error
+00:00:45.556 | 05 9f f0 20 00 0f | -89 CRC error
+00:00:45.821 | 05 9f 03 3e 34 a4 | -88 CRC error
+00:00:46.087 | 05 a0 03 40 21 cd | -90 CRC error
+00:00:46.352 | 05 81 03 4a 24 09 | -89 CRC error
+00:00:46.618 | 05 a2 03 44 1c f0 | -90 CRC error
+00:00:46.884 | 07 a1 32 57 ff ff ff ff | -89 CRC error
+00:00:47.408 | 05 a5 03 4a 1b 9b | -87 CRC error
+00:00:47.933 | 51 a5 03 4a 1b 9b dd 51 d9 36 08 04 c9 23 b0 b0 9a 16 41 95 78 01 a4 51 74 00 75 88 93 27 44 46 11 08 30 69 2a 80 0a 51 d0 4e a8 03 c2 21 e3 a0 1f 87 00 ad 46 0c 06 0f fe 00 02 9c e0 03 00 10 | -102 CRC error
+00:00:48.202 | 04 38 03 50 1e | -88 CRC error
+00:00:48.467 | 05 a9 03 52 2b 0a | -87 CRC error
+00:00:48.992 | packet overflow (possible length field corrupted) | CRC error
+00:00:50.034 | 05 af 03 5e 20 bb | -90 CRC error
+00:00:50.300 | 05 b0 03 60 10 71 | -89 CRC error
+00:00:50.565 | 05 b1 03 72 27 54 | -88 CRC error
+00:00:51.090 | 05 b3 03 66 0c 6a | -89 CRC error
+00:00:51.614 | 05 b4 03 6a 32 62 | -87 CRC error
+00:00:51.880 | packet overflow (possible length field corrupted) | CRC error
+00:00:52.145 | 05 b7 03 6e 23 73 | -88 CRC error
+00:00:53.447 | 05 bc 03 78 0a 7e | -87 CRC error
+00:00:53.713 | 05 bd 03 7a 23 d0 | -88 CRC error
+00:00:53.978 | 05 be 03 7c 17 3c | -86 CRC error
+00:00:54.503 | 05 c0 03 80 21 d9 | -87 CRC error
+00:00:55.287 | 05 c3 03 86 1d 39 | -87 CRC error
+00:00:55.552 | 05 c4 03 88 19 4a | -86 CRC error
+00:00:56.077 | 05 c6 03 8c 28 56 | -86 CRC error
+00:00:56.602 | 05 c8 03 90 19 24 | -88 CRC error
+00:00:57.126 | 05 ca 03 94 1c 24 | -89 CRC error
+00:00:57.392 | 05 cb 03 96 26 00 | -91 CRC error
+00:00:57.658 | 05 cd 03 9a 26 1d | -89 CRC error
+00:00:57.923 | 07 ce 03 9c 1f 7f 00 00 | -91 CRC error
+00:00:58.448 | 05 d0 03 a0 23 c8 | -86 CRC error
+00:00:58.714 | 05 d1 03 a2 27 2b | -85 CRC error
+00:00:58.979 | 05 d2 03 a4 1b 39 | -88 CRC error
+00:00:59.245 | 05 d3 03 a6 21 df | -87 CRC error
+00:00:59.510 | 05 d4 03 a8 28 9c | -87 CRC error
+00:01:00.035 | 05 d6 03 ac 14 9b | -87 CRC error
+00:01:00.301 | 05 d7 03 ae 1a 14 | -86 CRC error
+00:01:00.566 | 05 80 f0 04 1a bd | -85 CRC error
+00:01:00.832 | 05 d9 03 b2 1a 3c | -90 CRC error
+00:01:01.098 | 05 da 03 b4 1c e5 | -87 CRC error
+00:01:01.622 | 05 dc 03 b8 21 ed | -89 CRC error
+00:01:01.888 | packet overflow (possible length field corrupted) | CRC error
+00:01:02.153 | 04 c2 80 40 00 | -84 CRC error
+00:01:02.419 | 05 df 03 be 28 35 | -87 CRC error
+00:01:02.684 | 05 e0 03 c0 1e 56 | -86 CRC error
+00:01:02.950 | 05 e0 03 c2 20 e6 | -85 CRC error
+00:01:03.474 | 05 e3 03 c6 1d f4 | -86 CRC error
+00:01:03.740 | 05 e4 03 c8 1c d2 | -86 CRC error
+00:01:04.006 | 05 e5 03 ca 24 fd | -87 CRC error
+00:01:04.271 | 05 e6 03 cc 1c 04 | -90 CRC error
+00:01:04.537 | 05 e7 03 ce 30 58 | -86 CRC error
+00:01:04.803 | 05 e8 03 d0 28 07 | -87 CRC error
+00:01:05.068 | 05 e9 03 d2 1b 37 | -86 CRC error
+00:01:05.334 | 05 ea 03 d4 1c 84 | -87 CRC error
+00:01:05.599 | 05 eb 03 d6 1c 82 | -86 CRC error
+00:01:05.865 | 05 ec 03 d8 13 df | -89 CRC error
+00:01:06.389 | 05 ee 03 5c 21 0d | -85 CRC error
+00:01:06.655 | 05 ef 03 de 22 db | -87 CRC error
+00:01:07.439 | 5b ef 03 de 22 db dd 5b 27 3b 81 8c d4 c0 b1 43 3f 12 10 a9 0f cc 20 40 01 c6 df 10 c4 b2 04 07 a9 98 92 31 25 64 51 21 01 00 c0 02 c5 03 80 3a 40 0c 7c 63 0c 42 b3 1c 08 85 60 41 e9 24 00 10 | -28 CRC error
+00:01:07.708 | 05 f3 03 e6 18 56 | -90 CRC error
+00:01:07.973 | 05 f4 03 e8 20 49 | -88 CRC error
+00:01:08.239 | 29 ea 8f f4 3f 62 32 02 66 82 80 eb 53 ef 1a 8b 9e 2a a4 50 2a 07 04 5a 1a 42 84 c9 21 10 f9 06 64 65 ac 4e 30 40 55 00 14 80 | -87 CRC error
+00:01:08.765 | 05 f7 03 ee 1c 2b | -86 CRC error
+00:01:09.031 | 05 f8 03 f0 29 43 | -89 CRC error
+00:01:09.296 | 05 f9 03 f2 1d 55 | -87 CRC error
+00:01:09.562 | 05 fa 03 f4 25 be | -87 CRC error
+00:01:09.827 | 05 fb 03 f6 1b bb | -87 CRC error
+00:01:10.611 | 05 fe 03 fc 1f 4b | -87 CRC error
+00:01:11.136 | 0b 00 00 00 0c c6 00 00 03 fb 2a e6 | -88 CRC error
+00:01:11.661 | 01 02 | -86 CRC error
+00:01:11.926 | 05 03 04 06 1f 3b | -87 CRC error
+00:01:12.192 | 05 04 05 08 19 ef | -86 CRC error
+00:01:12.457 | 05 05 04 0a 1f cd | -87 CRC error
+00:01:12.723 | 05 06 04 0c 2d fe | -86 CRC error
+00:01:12.989 | 05 07 04 0e 16 6b | -85 CRC error
+00:01:13.254 | 01 08 | -87 CRC error
+00:01:13.520 | 05 09 04 12 2f 30 | -85 CRC error
+00:01:13.785 | 05 0a 04 14 18 8a | -85 CRC error
+00:01:14.051 | 04 40 00 7f ff | -91 CRC error
+00:01:14.575 | 05 0d 04 1a 16 1f | -87 CRC error
+00:01:14.841 | 05 0e 04 1c 2e 86 | -87 CRC error
+00:01:15.107 | 05 0f 04 1e 2a 6b | -89 CRC error
+00:01:15.631 | 05 11 04 22 17 05 | -88 CRC error
+00:01:16.415 | 05 14 04 28 1e 3a | -88 CRC error
+00:01:16.681 | 05 05 04 2a 26 d3 | -87 CRC error
+00:01:16.946 | 05 16 04 2c 21 39 | -88 CRC error
+00:01:17.212 | 05 16 04 2e 1d c5 | -89 CRC error
+00:01:17.477 | 05 18 04 30 28 41 | -89 CRC error
+00:01:17.743 | packet overflow (possible length field corrupted) | CRC error
+00:01:18.008 | 05 1a 04 34 28 03 | -87 CRC error
+00:01:18.274 | 05 19 04 36 21 d9 | -86 CRC error
+00:01:18.539 | 05 1c 04 38 28 59 | -88 CRC error
+00:01:18.805 | 05 1d 04 3a 22 ea | -85 CRC error
+00:01:19.071 | 05 1e 04 3c 1a 18 | -88 CRC error
+00:01:19.854 | 05 21 34 53 97 7f | -89 CRC error
+00:01:20.120 | packet overflow (possible length field corrupted) | CRC error
+00:01:20.385 | 05 23 04 46 24 d7 | -87 CRC error
+00:01:20.651 | 05 24 04 48 20 42 | -87 CRC error
+00:01:21.175 | 05 26 04 4c 15 a8 | -88 CRC error
+00:01:21.441 | 05 27 04 4e 17 cb | -88 CRC error
+00:01:21.707 | 05 28 04 50 22 69 | -87 CRC error
+00:01:21.972 | 05 29 04 52 1d 47 | -87 CRC error
+00:01:22.238 | 05 2a 04 54 1c 93 | -86 CRC error
+00:01:22.762 | 05 2c 04 58 25 95 | -88 CRC error
+00:01:23.287 | packet overflow (possible length field corrupted) | CRC error
+00:01:23.811 | 05 30 04 60 26 28 | -88 CRC error
+00:01:24.077 | 05 31 04 62 14 5e | -87 CRC error
+00:01:24.602 | 05 33 04 66 29 b9 | -89 CRC error
+00:01:24.867 | 05 34 04 68 1d c1 | -87 CRC error
+00:01:25.133 | 05 35 04 6a 28 f6 | -86 CRC error
+00:01:25.398 | 05 36 04 6c 2c 2a | -87 CRC error
+00:01:25.664 | 05 37 04 6e 1a c3 | -87 CRC error
+00:01:26.448 | 05 3a 04 74 2a 76 | -88 CRC error
+00:01:26.714 | 01 bb | -90 CRC error
+00:01:26.979 | 01 3c | -90 CRC error
+00:01:27.244 | 05 3d 04 7a 21 54 | -88 CRC error
+00:01:27.510 | 05 3e 04 7c 17 9f | -88 CRC error
+00:01:27.776 | 05 3f 04 7e 28 3f | -90 CRC error
+00:01:28.300 | 05 41 04 82 11 68 | -88 CRC error
+00:01:28.566 | 09 46 01 09 58 81 02 00 78 45 | -87 CRC error
+00:01:29.609 | 05 46 04 8c 30 04 | -87 CRC error
+00:01:30.133 | 05 48 04 90 1c 88 | -88 CRC error
