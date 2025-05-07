@@ -28,7 +28,7 @@ def hamming_weight(x: int) -> int:
     return bin(x).count('1')
 
 def main():
-    logfile = './test4.txt'  # file in the same directory
+    logfile = './ecc130.txt'  # file in the same directory
 
     # --- define your expected packet here ---
     # Byte sequence: 0f 00 10 20 30 40 50 60 70 80 90 a0 b0 c0 d0 e0
