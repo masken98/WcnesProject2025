@@ -62,7 +62,7 @@
  #define PIN_TX2                 27
  #define CLOCK_DIV0              40
  #define CLOCK_DIV1              36
- #define DESIRED_BAUD        200000
+ #define DESIRED_BAUD        250000
  #define TWOANTENNAS          true
  
  #define CARRIER_FEQ     2450000000

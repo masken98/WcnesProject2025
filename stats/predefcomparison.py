@@ -28,7 +28,7 @@ def hamming_weight(x: int) -> int:
     return bin(x).count('1')
 
 def main():
-    logfile = './ecc130.txt'  # file in the same directory
+    logfile = './eccbaud250.txt'  # file in the same directory
 
     # --- define your expected packet here ---
     # Byte sequence: 0f 00 10 20 30 40 50 60 70 80 90 a0 b0 c0 d0 e0
@@ -86,7 +86,7 @@ def main():
         print("No valid packets found; nothing to compute.", file=sys.stderr)
         sys.exit(1)
 
-    ber = total_bit_errors / total_bits
+    ber = total_bit_errors / total_bits * 100
     print(f"Packets analyzed    : {packets_seen}")
     print(f"Lines skipped       : {skipped}")
     print(f"Total bits checked  : {total_bits}")

@@ -1,0 +1,65 @@
+00:00:08.921 | 0f 17 1b 1d 16 77 | -80 CRC error
+00:00:09.959 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:10.482 | packet overflow (possible length field corrupted) | CRC error
+00:00:10.746 | 0f 17 1b 1d 1e 27 | -78 CRC error
+00:00:13.075 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:00:14.371 | 0f 17 1b fd 1e 27 | -80 CRC error
+00:00:15.926 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:17.223 | 0f 17 1b 1d 1e 27 | -82 CRC error
+00:00:17.487 | 0f f7 1f fd 1e 27 | -83 CRC error
+00:00:19.300 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:00:20.080 | 7f 17 1b 1d fe 2f | -80 CRC error
+00:00:20.603 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:22.931 | packet overflow (possible length field corrupted) | CRC error
+00:00:23.454 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:00:24.750 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:00:26.305 | 0f 17 1b 1d 1e 27 | -82 CRC error
+00:00:27.601 | packet overflow (possible length field corrupted) | CRC error
+00:00:28.897 | 0f f7 1b 1f 1e 27 | -81 CRC error
+00:00:30.968 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:00:31.233 | packet overflow (possible length field corrupted) | CRC error
+00:00:32.787 | packet overflow (possible length field corrupted) | CRC error
+00:00:33.051 | packet overflow (possible length field corrupted) | CRC error
+00:00:33.573 | 0f 17 1b 1d 1e 27 | -79 CRC error
+00:00:35.386 | packet overflow (possible length field corrupted) | CRC error
+00:00:36.682 | 0f f7 1b 1d 1b 27 | -80 CRC error
+00:00:37.721 | 0f f0 1b 1d 1e 27 | -80 CRC error
+00:00:38.501 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:40.830 | 0f f7 1b 1d 1e 27 | -81 CRC error
+00:00:41.352 | 0f 17 1b 1d 1e b7 | -81 CRC error
+00:00:42.133 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:42.655 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:42.920 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:00:46.023 | packet overflow (possible length field corrupted) | CRC error
+00:00:46.545 | packet overflow (possible length field corrupted) | CRC error
+00:00:47.841 | 0f 17 1b 1d 1e 27 | -82 CRC error
+00:00:48.106 | packet overflow (possible length field corrupted) | CRC error
+00:00:49.144 | 0f f7 1b 1d 1e 27 | -82 CRC error
+00:00:51.214 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:00:53.801 | packet overflow (possible length field corrupted) | CRC error
+00:00:54.065 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:55.104 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:00:56.400 | 0f 17 1b 1d 1e 27 | -78 CRC error
+00:00:57.439 | 0f f7 1b 1d 1e 27 | -84 CRC error
+00:00:58.478 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:58.742 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:00:59.265 | 0f 17 1b 1d 16 c7 | -81 CRC error
+00:00:59.787 | 0f 17 fb 1d 1b c7 | -82 CRC error
+00:01:01.600 | 0e ff ff fd 1e 27 | -79 CRC error
+00:01:01.864 | 0f 17 1b 1d 1e 27 | -79 CRC error
+00:01:02.129 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:01:04.974 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:01:05.754 | 0f 17 1b 1d 1e 27 | -80 CRC error
+00:01:09.115 | 0f 17 1b 1d 1e 27 | -82 CRC error
+00:01:09.637 | packet overflow (possible length field corrupted) | CRC error
+00:01:10.159 | packet overflow (possible length field corrupted) | CRC error
+00:01:10.682 | 0f 17 1b 1d 1e 27 | -81 CRC error
+00:01:12.752 | 0f 17 1b 1d 1e 27 | -82 CRC error
+00:01:16.629 | packet overflow (possible length field corrupted) | CRC error
+00:01:17.667 | 1f 17 1b 1d 1e 27 | -81 CRC error
+00:01:17.932 | 0f 17 1b 1d 1e 27 | -83 CRC error
+00:01:20.518 | packet overflow (possible length field corrupted) | CRC error
+00:01:21.298 | 0f 17 1b 1d 1e 27 | -82 CRC error
+00:01:22.853 | 0f 17 1b 1d 1e 27 | -79 CRC error
+00:01:23.892 | 0f 17 1b 1d 1e 27 | -78 CRC error
+00:01:24.672 | 0f 17 1b 1d 1e 27 | -80 CRC error
