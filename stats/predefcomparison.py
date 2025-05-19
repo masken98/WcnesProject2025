@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import re
 import sys
+from functions import *
+import matplotlib.pyplot as plt
+
 
 def flip_counter(expected: list[int], received: list[int]) -> tuple[int, int]:
     """
@@ -36,6 +39,8 @@ def main():
     expected = [int(b, 16) for b in expected_hex.split()]
     packet_len = len(expected)
 
+    bit_errors_per_packet = []
+
     total_bits = 0
     total_bit_errors = 0
     packets_seen = 0
@@ -68,6 +73,8 @@ def main():
                     hamming_weight(e ^ r) for e, r in zip(expected, rec_bytes)
                 )
 
+                bit_errors_per_packet.append(bit_errors)
+
                 one, zero = flip_counter(expected, rec_bytes)
                 flipped_to_one  += one
                 flipped_to_zero += zero
@@ -94,6 +101,17 @@ def main():
     print(f"Bit-Error Rate (BER): {ber:.6e}")
     print(f"Flips from 0 to 1   : {flipped_to_one}")
     print(f"Flips from 1 to 0   : {flipped_to_zero}")
+
+    # plot results
+    plt.scatter(range(len(bit_errors_per_packet)), bit_errors_per_packet, color='black', alpha=0.7, marker='o', s=6)
+    plt.title("Bit Errors per Packet")
+    plt.xlabel("Packet Index")
+    plt.ylabel("Number of Bit Errors")
+    plt.grid(True)
+    plt.xlim(-0.5, len(bit_errors_per_packet) - 0.5)
+    plt.ylim(-0.5, max(bit_errors_per_packet) + 1)
+    plt.savefig("ecc130.png", dpi=300, bbox_inches='tight') 
+    plt.show()
 
 if __name__ == "__main__":
     main()
